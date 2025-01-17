@@ -49,7 +49,7 @@ const SplineWrapper = () => {
   if (!isClient) return null;
 
   return (
-    <Spline scene="https://prod.spline.design/HsgqcVtbCWVzfEyF/scene.splinecode" />
+    <Spline scene="https://prod.spline.design/4el-qyxhOAjpQJ2Z/scene.splinecode" />
   );
 };
 
