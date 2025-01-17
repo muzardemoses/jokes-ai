@@ -1,29 +1,30 @@
-'use client';
+// 'use client';
 
-import Spline from '@splinetool/react-spline';
-import { Suspense, useEffect, useState } from 'react';
+import Spline from '@splinetool/react-spline/next';
+
+// import { Suspense, useEffect, useState } from 'react';
 
 // Component to detect crawler
-const useIsCrawler = () => {
-  const [isCrawler, setIsCrawler] = useState(true); // Default to true for SSR
+// const useIsCrawler = () => {
+//   const [isCrawler, setIsCrawler] = useState(true); // Default to true for SSR
 
-  useEffect(() => {
-    // Check if the user agent is a crawler
-    const userAgent = navigator.userAgent.toLowerCase();
-    const crawlers = [
-      'googlebot',
-      'bingbot',
-      'slurp',
-      'duckduckbot',
-      'baiduspider',
-      'yandexbot',
-    ];
-    const isBot = crawlers.some((crawler) => userAgent.includes(crawler));
-    setIsCrawler(isBot);
-  }, []);
+//   useEffect(() => {
+//     // Check if the user agent is a crawler
+//     const userAgent = navigator.userAgent.toLowerCase();
+//     const crawlers = [
+//       'googlebot',
+//       'bingbot',
+//       'slurp',
+//       'duckduckbot',
+//       'baiduspider',
+//       'yandexbot',
+//     ];
+//     const isBot = crawlers.some((crawler) => userAgent.includes(crawler));
+//     setIsCrawler(isBot);
+//   }, []);
 
-  return isCrawler;
-};
+//   return isCrawler;
+// };
 
 // Hero content component
 const HeroContent = () => (
@@ -39,45 +40,45 @@ const HeroContent = () => (
 );
 
 // Wrapper component for Spline that only renders on client side
-const SplineWrapper = () => {
-    const [isClient, setIsClient] = useState(false);
+// const SplineWrapper = () => {
+//     const [isClient, setIsClient] = useState(false);
   
-    useEffect(() => {
-      setIsClient(true);
-    }, []);
+//     useEffect(() => {
+//       setIsClient(true);
+//     }, []);
   
-    if (!isClient) return null;
+//     if (!isClient) return null;
   
-    return (
-      <Spline scene="https://prod.spline.design/4el-qyxhOAjpQJ2Z/scene.splinecode" />
-    );
-  };
+//     return (
+//       <Spline scene="https://prod.spline.design/4el-qyxhOAjpQJ2Z/scene.splinecode" />
+//     );
+//   };
   
 
 function HeroSection() {
-    const isCrawler = useIsCrawler();
+    // const isCrawler = useIsCrawler();
   
     return (
       <div className="relative h-screen">
         <HeroContent />
   
         {/* If not a crawler, load Spline */}
-        {!isCrawler ? (
+        {/* {!isCrawler ? (
           <Suspense fallback={null}>
             <SplineWrapper />
           </Suspense>
         ) : (
-          // Placeholder for crawlers
           <div className="absolute inset-0 flex items-center justify-center">
             <p>Interactive 3D content is not available for crawlers.</p>
           </div>
-        )}
+        )} */}
+        <Spline scene="https://prod.spline.design/HsgqcVtbCWVzfEyF/scene.splinecode" />
   
-        <noscript>
+        {/* <noscript>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
             <HeroContent />
           </div>
-        </noscript>
+        </noscript> */}
       </div>
     );
   }
