@@ -40,42 +40,46 @@ const HeroContent = () => (
 
 // Wrapper component for Spline that only renders on client side
 const SplineWrapper = () => {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) return null;
-
-  return (
-    <Spline scene="https://prod.spline.design/4el-qyxhOAjpQJ2Z/scene.splinecode" />
-  );
-};
+    const [isClient, setIsClient] = useState(false);
+  
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
+  
+    if (!isClient) return null;
+  
+    return (
+      <Spline scene="https://prod.spline.design/4el-qyxhOAjpQJ2Z/scene.splinecode" />
+    );
+  };
+  
 
 function HeroSection() {
-  const isCrawler = useIsCrawler();
-
-  return (
-    <div className="relative h-screen">
-      {/* Static content that's always rendered */}
-      <HeroContent />
-
-      {/* Render Spline only for non-crawler users */}
-      {!isCrawler && (
-        <Suspense fallback={null}>
-          <SplineWrapper />
-        </Suspense>
-      )}
-
-      {/* Fallback content for users without JavaScript */}
-      <noscript>
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-          <HeroContent />
-        </div>
-      </noscript>
-    </div>
-  );
-}
+    const isCrawler = useIsCrawler();
+  
+    return (
+      <div className="relative h-screen">
+        <HeroContent />
+  
+        {/* If not a crawler, load Spline */}
+        {!isCrawler ? (
+          <Suspense fallback={null}>
+            <SplineWrapper />
+          </Suspense>
+        ) : (
+          // Placeholder for crawlers
+          <div className="absolute inset-0 flex items-center justify-center">
+            <p>Interactive 3D content is not available for crawlers.</p>
+          </div>
+        )}
+  
+        <noscript>
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <HeroContent />
+          </div>
+        </noscript>
+      </div>
+    );
+  }
 
 export default HeroSection;
