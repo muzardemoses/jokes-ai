@@ -72,7 +72,7 @@ function HeroSection() {
             <p>Interactive 3D content is not available for crawlers.</p>
           </div>
         )} */}
-        <Spline scene="https://prod.spline.design/HsgqcVtbCWVzfEyF/scene.splinecode" />
+        <Spline scene="https://prod.spline.design/4el-qyxhOAjpQJ2Z/scene.splinecode" />
   
         {/* <noscript>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
