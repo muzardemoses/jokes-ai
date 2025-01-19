@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@genkit-ai/googleai": "^0.9.12",
     "@splinetool/react-spline": "^4.0.0",
     "@splinetool/runtime": "^1.9.59",
+    "genkit": "^0.9.12",
     "next": "15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

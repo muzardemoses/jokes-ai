@@ -1,103 +1,120 @@
-import Image from "next/image";
-import HeroSection from "@/components/HeroSection";
+"use client"
+import { useState } from "react";
+
+// Define the Joke interface for better typing
+interface Joke {
+  description: string;
+  punchline: string;
+  tone: "funny" | "sarcastic" | "punny" | "dry";
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <HeroSection />
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [subject, setSubject] = useState<string>("");
+  const [joke, setJoke] = useState<Joke | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Handle joke generation on form submit
+  const handleJokeGeneration = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!subject.trim()) {
+      setError("Please enter a subject!");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("/api/generateJoke", {
+        method: "POST",
+        body: JSON.stringify({ subject }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        setJoke(result);
+      } else {
+        setError(result.error || "Error generating joke. Try again.");
+      }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError("Error generating joke. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen font-[family-name:var(--font-geist-sans)] flex flex-col items-center justify-center bg-black text-white p-6 sm:p-10 gap-12">
+      <div className="text-center flex flex-col items-center gap-4">
+        <h1 className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500">
+          Joke Generator
+        </h1>
+        <p className="text-lg text-gray-400 mt-2">Enter a subject, and let&apos;s get a joke!</p>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 100 100"
+          width="120"
+          height="120"
+          fill="none"
+          stroke="none"
+        >
+          <circle cx="50" cy="50" r="45" fill="yellow" stroke="black" stroke-width="2" />
+          <circle cx="35" cy="40" r="5" fill="black" />
+          <circle cx="65" cy="40" r="5" fill="black" />
+          <path
+            d="M 30 55 Q 50 75, 70 55"
+            stroke="black"
+            stroke-width="4"
+            fill="transparent"
+            stroke-linecap="round"
+          />
+          <path
+            d="M 25 45 Q 50 65, 75 45"
+            stroke="black"
+            stroke-width="3"
+            fill="transparent"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+
+      <form
+        onSubmit={handleJokeGeneration}
+        className="flex flex-col items-center gap-8 w-full max-w-lg bg-gray-800 p-6 rounded-lg shadow-xl"
+      >
+        <input
+          type="text"
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+          placeholder="Enter a subject for the joke"
+          className="p-4 w-full rounded-lg border-2 border-gray-600 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="p-4 bg-gradient-to-r from-pink-500 to-blue-500 text-white rounded-lg w-full hover:bg-gradient-to-l hover:from-pink-600 hover:to-blue-600 focus:ring-2 focus:ring-pink-500"
+        >
+          {loading ? "Generating..." : "Generate Joke"}
+        </button>
+      </form>
+
+      {error && <p className="text-red-400 text-sm mt-4">{error}</p>}
+
+      {joke && (
+        <div className="mt-8 text-center max-w-lg p-6 rounded-lg shadow-xl bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500">
+          <h2 className="text-2xl font-semibold text-white">Your Joke:</h2>
+          <p className="text-lg text-gray-200 mt-2">{joke.description}</p>
+          <p className="text-3xl font-bold text-yellow-300 mt-4">{joke.punchline}</p>
+          <p className="mt-2 text-sm text-black">Tone: {joke.tone}</p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      )}
     </div>
   );
 }

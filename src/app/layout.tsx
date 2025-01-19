@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Jokes AI",
-  description: "Jokes Generator AI",
+  description: "Jokes Generator AI build by Moses Adebayo",
 };
 
 export default function RootLayout({
