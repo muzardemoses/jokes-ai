@@ -29,7 +29,7 @@ const jokeGeneratorFlow = ai.defineFlow(
 
         const { output } = await ai.generate({
             model: gemini15Flash,
-            prompt: `Generate a funny joke about ${jokeSubject}. Include a punchline and make it relevant and engaging. Add a playful tone.`,
+            prompt: `Generate a very funny joke about ${jokeSubject}. Include a punchline and make it relevant and engaging. Add a playful tone and don't generate based on previous response.`,
             output: { schema: JokeSchema },
         });
 

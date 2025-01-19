@@ -64,22 +64,22 @@ export default function Home() {
           fill="none"
           stroke="none"
         >
-          <circle cx="50" cy="50" r="45" fill="yellow" stroke="black" stroke-width="2" />
+          <circle cx="50" cy="50" r="45" fill="yellow" stroke="black" strokeWidth="2" />
           <circle cx="35" cy="40" r="5" fill="black" />
           <circle cx="65" cy="40" r="5" fill="black" />
           <path
             d="M 30 55 Q 50 75, 70 55"
             stroke="black"
-            stroke-width="4"
+            strokeWidth="4"
             fill="transparent"
-            stroke-linecap="round"
+            strokeLinecap="round"
           />
           <path
             d="M 25 45 Q 50 65, 75 45"
             stroke="black"
-            stroke-width="3"
+            strokeWidth="3"
             fill="transparent"
-            stroke-linecap="round"
+            strokeLinecap="round"
           />
         </svg>
       </div>
